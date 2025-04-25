@@ -6,7 +6,7 @@
   <title>Card 4×5 Template</title>
 
   <style>
-  /* ── ❶ 自訂區 ───────────────────────── */
+  /* ── ❶ 自訂區 ───────────────────── */
   :root {
     /* 背景主色/次色（空字串表示單色） */
     --color-primary:   {{primary}};
@@ -25,10 +25,12 @@
     --font-value-size:  0.8rem;
     --font-handle-size: 0.8rem;
 
-    --edge-spacing:     60px;
-    --author-repo-gap:   2px;
-    --field-gap:        12px;
-    --radius:           0px;     /* 方角 */
+    /* 間距設定 */
+    --edge-spacing:   60px;
+    --author-repo-gap: 2px;
+    --tag-gap:       4px;
+    --field-gap:     12px;
+    --radius:        0px;  /* 方角 */
   }
 
   /* ❷ 嵌入式字體 Data URI */
@@ -40,91 +42,102 @@
     font-display: swap;
   }
 
-  /* ── Reset & Layout ─────────────────── */
+  /* ── Reset & Layout ───────────────── */
   *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
   body {
     background: #000;        /* 整頁黑底 */
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
-    font-family:var(--font-family);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: var(--font-family);
   }
 
   /* 卡片 (4:5) */
   .card {
-    position:relative;
-    width:360px;
-    aspect-ratio:4/5;
-    border-radius:var(--radius);
-    background:
-      linear-gradient(
-        135deg,
-        var(--color-primary),
-        var(--color-secondary, var(--color-primary))
-      );
-    overflow:hidden;
-    color:var(--text-color);
-    font-family:var(--font-family);
+    position: relative;
+    width: 360px;
+    aspect-ratio: 4/5;
+    border-radius: var(--radius);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-secondary, var(--color-primary))
+    );
+    overflow: hidden;
+    color: var(--text-color);
+    font-family: var(--font-family);
   }
 
-  /* 作者 / Repo */
-  .author, .repo {
-    position:absolute;
-    left:var(--edge-spacing);
-    right:var(--edge-spacing);
-    overflow-wrap:anywhere;
-    max-width:calc(100% - 2 * var(--edge-spacing));
-  }
+  /* 作者 */
   .author {
-    top:var(--edge-spacing);
-    font-size:var(--font-author-size);
+    position: absolute;
+    top: var(--edge-spacing);
+    left: var(--edge-spacing);
+    right: var(--edge-spacing);
+    font-size: var(--font-author-size);
+    overflow-wrap: anywhere;
   }
+
+  /* Repo + Tag */
   .repo {
-    top:calc(
+    position: absolute;
+    left: var(--edge-spacing);
+    right: var(--edge-spacing);
+    top: calc(
       var(--edge-spacing)
       + var(--font-author-size)
       + var(--author-repo-gap)
     );
-    font-size:var(--font-repo-size);
-    font-weight:bold;
-    line-height:1.1;
+    font-size: var(--font-repo-size);
+    font-weight: bold;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+  }
+  .repo .tag {
+    display: block;
+    font-size: var(--font-label-size);
+    opacity: .8;
+    margin-top: var(--tag-gap);
   }
 
   /* 右下統計 */
   .fields {
-    position:absolute;
-    bottom:var(--edge-spacing);
-    right:var(--edge-spacing);
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    gap:var(--field-gap);
+    position: absolute;
+    bottom: var(--edge-spacing);
+    right: var(--edge-spacing);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--field-gap);
   }
   .field {
-    display:flex;
-    flex-direction:column;
-    align-items:flex-end;
-    line-height:1.1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.1;
   }
-    .field .label { font-size:var(--font-label-size); opacity:.8; }
-    .field .value { font-size:var(--font-value-size); font-weight:600; }
+    .field .label { font-size: var(--font-label-size); opacity: .8; }
+    .field .value { font-size: var(--font-value-size); font-weight: 600; }
 
   /* Handle */
   .handle {
-    position:absolute;
-    bottom:var(--edge-spacing);
-    left:var(--edge-spacing);
-    transform:rotate(-90deg);
-    transform-origin:left bottom;
-    font-size:var(--font-handle-size);
+    position: absolute;
+    bottom: var(--edge-spacing);
+    left: var(--edge-spacing);
+    transform: rotate(-90deg);
+    transform-origin: left bottom;
+    font-size: var(--font-handle-size);
   }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="author">{{author}}</div>
-    <div class="repo">{{repo}}</div>
+    <div class="repo">
+      {{repo}}
+      <span class="tag">{{domain}} {{serial}}</span>
+    </div>
     <div class="fields">
       <div class="field"><span class="label">Star</span><span class="value">{{star}}</span></div>
       <div class="field"><span class="label">Add</span><span class="value">{{add}}</span></div>
