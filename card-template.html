@@ -2,133 +2,118 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Card 4×5 Template</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Card 4×5 Template</title>
   <style>
-  /* ── ❶ 自訂區 ───────────────────── */
-  :root {
-    /* 背景主色/次色（空字串表示單色） */
-    --color-primary:   {{primary}};
-    --color-secondary: {{secondary}};
+    :root {
+      --color-primary:   {{primary}};
+      --color-secondary: {{secondary}};
+      --text-color:      {{textColor}};
+      --font-family: 'MonoLisaVar', Arial, sans-serif;
 
-    /* 文字色 */
-    --text-color: {{textColor}};
+      /* 下面你已經乘 3 過了，如果還沒，務必直接改成這些值 */
+      --font-author-size: 2.7rem;  /* 0.9×3 */
+      --font-repo-size:   6rem;    /* 2×3 */
+      --font-label-size:  2.25rem; /* 0.75×3 */
+      --font-value-size:  2.4rem;  /* 0.8×3 */
+      --font-handle-size: 2.4rem;  /* 0.8×3 */
 
-    /* 字體 */
-    --font-family: 'MonoLisaVar', Arial, sans-serif;
+      --edge-spacing:    180px; /* 60×3 */
+      --author-repo-gap: 6px;   /* 2×3 */
+      --tag-gap:         12px;  /* 4×3 */
+      --field-gap:       36px;  /* 12×3 */
+      --radius:          0px;
+    }
 
-    /* 字級設定 */
-    --font-author-size: 0.9rem;
-    --font-repo-size:   2rem;
-    --font-label-size:  0.75rem;
-    --font-value-size:  0.8rem;
-    --font-handle-size: 0.8rem;
+    /* 字體不動 */
+    @font-face {
+      font-family: 'MonoLisaVar';
+      src: url('{{fontDataUrl}}') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
 
-    /* 間距設定 */
-    --edge-spacing:   60px;
-    --author-repo-gap: 2px;
-    --tag-gap:       4px;
-    --field-gap:     12px;
-    --radius:        0px;  /* 方角 */
-  }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body {
+      background: #000;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+      font-family: var(--font-family);
+    }
 
-  /* ❷ 嵌入式字體 Data URI */
-  @font-face {
-    font-family: 'MonoLisaVar';
-    src: url('{{fontDataUrl}}') format('truetype');
-    font-weight: 100 900;
-    font-style: normal;
-    font-display: swap;
-  }
+    /* ← 這裡同時定寬高，保證截圖絕對是 1080×1350px */
+    .card {
+      position: relative;
+      width: 1080px;
+      height: 1350px;
+      border-radius: var(--radius);
+      background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary, var(--color-primary))
+      );
+      overflow: hidden;
+      color: var(--text-color);
+      font-family: var(--font-family);
+    }
 
-  /* ── Reset & Layout ───────────────── */
-  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-  body {
-    background: #000;        /* 整頁黑底 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    font-family: var(--font-family);
-  }
+    .author {
+      position: absolute;
+      top:    var(--edge-spacing);
+      left:   var(--edge-spacing);
+      right:  var(--edge-spacing);
+      font-size: var(--font-author-size);
+      overflow-wrap: anywhere;
+    }
 
-  /* 卡片 (4:5) */
-  .card {
-    position: relative;
-    width: 360px;
-    aspect-ratio: 4/5;
-    border-radius: var(--radius);
-    background: linear-gradient(
-      135deg,
-      var(--color-primary),
-      var(--color-secondary, var(--color-primary))
-    );
-    overflow: hidden;
-    color: var(--text-color);
-    font-family: var(--font-family);
-  }
+    .repo {
+      position: absolute;
+      left:  var(--edge-spacing);
+      right: var(--edge-spacing);
+      top:   calc(
+        var(--edge-spacing)
+        + var(--font-author-size)
+        + var(--author-repo-gap)
+      );
+      font-size: var(--font-repo-size);
+      font-weight: bold;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+    .repo .tag {
+      display: block;
+      font-size: var(--font-label-size);
+      opacity: .8;
+      margin-top: var(--tag-gap);
+    }
 
-  /* 作者 */
-  .author {
-    position: absolute;
-    top: var(--edge-spacing);
-    left: var(--edge-spacing);
-    right: var(--edge-spacing);
-    font-size: var(--font-author-size);
-    overflow-wrap: anywhere;
-  }
-
-  /* Repo + Tag */
-  .repo {
-    position: absolute;
-    left: var(--edge-spacing);
-    right: var(--edge-spacing);
-    top: calc(
-      var(--edge-spacing)
-      + var(--font-author-size)
-      + var(--author-repo-gap)
-    );
-    font-size: var(--font-repo-size);
-    font-weight: bold;
-    line-height: 1.1;
-    overflow-wrap: anywhere;
-  }
-  .repo .tag {
-    display: block;
-    font-size: var(--font-label-size);
-    opacity: .8;
-    margin-top: var(--tag-gap);
-  }
-
-  /* 右下統計 */
-  .fields {
-    position: absolute;
-    bottom: var(--edge-spacing);
-    right: var(--edge-spacing);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--field-gap);
-  }
-  .field {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    line-height: 1.1;
-  }
+    .fields {
+      position: absolute;
+      bottom: var(--edge-spacing);
+      right:  var(--edge-spacing);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--field-gap);
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      line-height: 1.1;
+    }
     .field .label { font-size: var(--font-label-size); opacity: .8; }
     .field .value { font-size: var(--font-value-size); font-weight: 600; }
 
-  /* Handle */
-  .handle {
-    position: absolute;
-    bottom: var(--edge-spacing);
-    left: var(--edge-spacing);
-    transform: rotate(-90deg);
-    transform-origin: left bottom;
-    font-size: var(--font-handle-size);
-  }
+    .handle {
+      position: absolute;
+      bottom: var(--edge-spacing);
+      left:   var(--edge-spacing);
+      transform: rotate(-90deg);
+      transform-origin: left bottom;
+      font-size: var(--font-handle-size);
+    }
   </style>
 </head>
 <body>
